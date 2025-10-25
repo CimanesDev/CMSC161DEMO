@@ -38,18 +38,19 @@ export const InventoryStatusChart = () => {
         <p className="text-xs text-gray-600">Current stock levels across all products</p>
       </div>
 
-      <ResponsiveContainer width="100%" height={200}>
+      <ResponsiveContainer width="100%" height={250}>
         <PieChart>
           <Pie
             data={data}
             cx="50%"
             cy="50%"
-            innerRadius={40}
-            outerRadius={80}
+            innerRadius={50}
+            outerRadius={90}
             fill="#8884d8"
-            paddingAngle={2}
+            paddingAngle={3}
             dataKey="count"
             label={({ percentage }) => `${percentage}%`}
+            labelLine={false}
           >
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[entry.category as keyof typeof COLORS]} />
@@ -59,9 +60,10 @@ export const InventoryStatusChart = () => {
             contentStyle={{
               backgroundColor: 'white',
               border: '1px solid #e2e8f0',
-              borderRadius: '6px',
-              boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-              fontSize: '12px'
+              borderRadius: '8px',
+              boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+              fontSize: '12px',
+              padding: '12px'
             }}
             formatter={(value: number, name: string, props: any) => [
               `${value} items (${props.payload.percentage}%)`,
@@ -71,7 +73,7 @@ export const InventoryStatusChart = () => {
           <Legend 
             verticalAlign="bottom" 
             height={36}
-            wrapperStyle={{ fontSize: '12px' }}
+            wrapperStyle={{ fontSize: '12px', paddingTop: '8px' }}
             formatter={(value, entry: any) => entry.payload.category}
           />
         </PieChart>

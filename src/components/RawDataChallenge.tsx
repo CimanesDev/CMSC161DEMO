@@ -184,8 +184,8 @@ export const RawDataChallenge = ({ onReveal, activeTable, onTableChange, transac
                     <>Find: <span className="font-bold text-blue-600">The month with highest income</span> and{" "}
                     <span className="font-bold text-blue-600">the month with lowest expenses</span></>
                   ) : activeTable === 'sales' ? (
-                    <>Find: <span className="font-bold text-blue-600">The Swiss Army knife with most revenue</span> and{" "}
-                    <span className="font-bold text-blue-600">the model with least units sold</span></>
+                    <>Find: <span className="font-bold text-blue-600">The product with highest conversion rate</span> and{" "}
+                    <span className="font-bold text-blue-600">the model with most product views but lowest conversion</span></>
                   ) : (
                     <>Choose a data type from the navigation to start the challenge</>
                   )}
@@ -271,9 +271,10 @@ export const RawDataChallenge = ({ onReveal, activeTable, onTableChange, transac
                             <tr>
                               <th className="text-left px-3 py-2 font-semibold" style={{ color: '#374151' }}>Product</th>
                               <th className="text-right px-3 py-2 font-semibold" style={{ color: '#374151' }}>Revenue</th>
+                              <th className="text-right px-3 py-2 font-semibold" style={{ color: '#374151' }}>Product Views</th>
                               <th className="text-right px-3 py-2 font-semibold" style={{ color: '#374151' }}>Units Sold</th>
                               <th className="text-right px-3 py-2 font-semibold" style={{ color: '#374151' }}>Stock</th>
-                              <th className="text-right px-3 py-2 font-semibold" style={{ color: '#374151' }}>Margin %</th>
+                              <th className="text-right px-3 py-2 font-semibold" style={{ color: '#374151' }}>Conversion Rate %</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -281,9 +282,10 @@ export const RawDataChallenge = ({ onReveal, activeTable, onTableChange, transac
                               <tr key={idx} className="border-b hover:bg-gray-50 transition-colors" style={{ borderColor: '#E5E7EB' }}>
                                 <td className="px-3 py-2 font-medium" style={{ color: '#1F2937' }}>{row.product}</td>
                                 <td className="px-3 py-2 text-right font-mono text-green-600">₱{row.revenue.toLocaleString()}</td>
-                                <td className="px-3 py-2 text-right font-mono text-blue-600">{row.unitsSold}</td>
+                                <td className="px-3 py-2 text-right font-mono text-blue-600">{row.productViews.toLocaleString()}</td>
+                                <td className="px-3 py-2 text-right font-mono text-purple-600">{row.unitsSold}</td>
                                 <td className={`px-3 py-2 text-right font-mono ${row.stock < 10 ? 'text-red-600' : 'text-green-600'}`}>{row.stock}</td>
-                                <td className="px-3 py-2 text-right font-mono text-purple-600">{row.margin}%</td>
+                                <td className="px-3 py-2 text-right font-mono text-orange-600">{row.conversionRate}%</td>
                               </tr>
                             ))}
                           </tbody>

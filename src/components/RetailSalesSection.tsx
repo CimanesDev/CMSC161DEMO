@@ -1,14 +1,11 @@
-import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { SalesTrendChart } from "@/components/charts/SalesTrendChart";
 import { ProductComparisonChart } from "@/components/charts/ProductComparisonChart";
 import { InventoryStatusChart } from "@/components/charts/InventoryStatusChart";
-import { salesData, rawTableData } from "@/data/mockData";
+import { ScatterPlotChart } from "@/components/charts/ScatterPlotChart";
+import { ComparisonBarChart } from "@/components/charts/ComparisonBarChart";
+import { rawTableData } from "@/data/mockData";
 
 export const RetailSalesSection = () => {
-  const [timeFilter, setTimeFilter] = useState<'week' | 'month' | 'quarter'>('week');
 
   // Calculate KPIs from real table data
   const totalRevenue = rawTableData.sales.reduce((sum, product) => sum + product.revenue, 0);
@@ -78,36 +75,9 @@ export const RetailSalesSection = () => {
         </div>
       </div>
 
-      {/* Filter Controls */}
-      <div className="bg-white rounded-lg p-6 shadow-sm border" style={{
-        backgroundColor: '#FFFFFF',
-        borderColor: '#E5E7EB'
-      }}>
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold" style={{ color: '#1F2937' }}>Time Period Filter</h3>
-          <Select value={timeFilter} onValueChange={(value: 'week' | 'month' | 'quarter') => setTimeFilter(value)}>
-            <SelectTrigger className="w-40">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="week">Past Week</SelectItem>
-              <SelectItem value="month">Past Month</SelectItem>
-              <SelectItem value="quarter">Past Quarter</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
 
       {/* Charts Grid */}
       <div className="grid lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg p-6 shadow-sm border" style={{
-          backgroundColor: '#FFFFFF',
-          borderColor: '#E5E7EB'
-        }}>
-          <h3 className="text-lg font-semibold mb-4" style={{ color: '#1F2937' }}>Sales Trend Analysis</h3>
-          <SalesTrendChart timeFilter={timeFilter} />
-        </div>
-
         <div className="bg-white rounded-lg p-6 shadow-sm border" style={{
           backgroundColor: '#FFFFFF',
           borderColor: '#E5E7EB'
@@ -124,6 +94,21 @@ export const RetailSalesSection = () => {
           <InventoryStatusChart />
         </div>
 
+        <div className="bg-white rounded-lg p-6 shadow-sm border" style={{
+          backgroundColor: '#FFFFFF',
+          borderColor: '#E5E7EB'
+        }}>
+          <h3 className="text-lg font-semibold mb-4" style={{ color: '#1F2937' }}>Traffic vs Revenue Analysis</h3>
+          <ScatterPlotChart />
+        </div>
+
+        <div className="bg-white rounded-lg p-6 shadow-sm border" style={{
+          backgroundColor: '#FFFFFF',
+          borderColor: '#E5E7EB'
+        }}>
+          <h3 className="text-lg font-semibold mb-4" style={{ color: '#1F2937' }}>Traffic vs Sales Efficiency</h3>
+          <ComparisonBarChart />
+        </div>
       </div>
 
       {/* HIG Principles */}
@@ -136,11 +121,11 @@ export const RetailSalesSection = () => {
           <div className="space-y-3">
             <div className="flex items-start gap-2">
               <div className="w-1.5 h-1.5 rounded-full mt-2 bg-blue-500"></div>
-              <span><strong style={{ color: '#1F2937' }}>Analyzing Trends:</strong> Dual-axis chart shows revenue and AOV correlation over time</span>
+              <span><strong style={{ color: '#1F2937' }}>Evaluating Items:</strong> Horizontal bars instantly identify top-performing products</span>
             </div>
             <div className="flex items-start gap-2">
               <div className="w-1.5 h-1.5 rounded-full mt-2 bg-blue-500"></div>
-              <span><strong style={{ color: '#1F2937' }}>Evaluating Items:</strong> Horizontal bars instantly identify top-performing products</span>
+              <span><strong style={{ color: '#1F2937' }}>Advanced Analysis:</strong> Scatter plot reveals "Stars" vs "Hidden Gems" (high traffic vs high conversion)</span>
             </div>
           </div>
           <div className="space-y-3">
@@ -150,7 +135,7 @@ export const RetailSalesSection = () => {
             </div>
             <div className="flex items-start gap-2">
               <div className="w-1.5 h-1.5 rounded-full mt-2 bg-blue-500"></div>
-              <span><strong style={{ color: '#1F2937' }}>Composition:</strong> Pie chart shows revenue breakdown by product categories</span>
+              <span><strong style={{ color: '#1F2937' }}>Efficiency Focus:</strong> Side-by-side bars show traffic vs sales conversion gaps</span>
             </div>
           </div>
         </div>

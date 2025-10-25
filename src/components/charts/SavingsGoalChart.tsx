@@ -1,4 +1,4 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Cell } from 'recharts';
 import { financialData } from "@/data/mockData";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -50,6 +50,11 @@ export const SavingsGoalChart = ({ transactions = [] }: SavingsGoalChartProps) =
     };
   });
 
+  // Calculate achievement statistics
+  const achievedCount = monthlySavings.filter(month => month.achieved).length;
+  const totalMonths = monthlySavings.length;
+  const achievementRate = Math.round((achievedCount / totalMonths) * 100);
+
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
@@ -90,21 +95,56 @@ export const SavingsGoalChart = ({ transactions = [] }: SavingsGoalChartProps) =
               boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
               fontSize: '12px'
             }}
-            formatter={(value: number, name: string) => [
-              `₱${value.toLocaleString()}`,
-              name === 'goal' ? 'Goal' : 'Actual Savings'
-            ]}
-          />
-          <Legend 
-            verticalAlign="bottom" 
-            height={36}
-            wrapperStyle={{ fontSize: '12px', paddingTop: '8px' }}
-            formatter={(value) => value === 'goal' ? 'Goal' : 'Actual Savings'}
+            formatter={(value: number, name: string, props: any) => {
+              const achieved = props.payload?.achieved;
+              const status = achieved ? '✅ Goal Achieved' : '❌ Goal Missed';
+              return [
+                `₱${value.toLocaleString()}`,
+                name === 'goal' ? 'Goal' : `Actual Savings (${status})`
+              ];
+            }}
           />
           <Bar dataKey="goal" fill="#e2e8f0" name="goal" radius={[2, 2, 0, 0]} />
-          <Bar dataKey="actual" fill="#10b981" name="actual" radius={[2, 2, 0, 0]} />
+          <Bar 
+            dataKey="actual" 
+            name="actual" 
+            radius={[2, 2, 0, 0]}
+          >
+            {monthlySavings.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={entry.achieved ? '#10b981' : '#ef4444'} />
+            ))}
+          </Bar>
         </BarChart>
       </ResponsiveContainer>
+
+      {/* Legend */}
+      <div className="flex items-center justify-center gap-6 text-xs">
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded bg-gray-300"></div>
+          <span className="text-gray-600">Monthly Goal</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded bg-green-500"></div>
+          <span className="text-gray-600">Goal Achieved</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded bg-red-500"></div>
+          <span className="text-gray-600">Goal Missed</span>
+        </div>
+      </div>
+
+      {/* Clean Achievement Summary */}
+      <div className="text-center">
+        <div className={`inline-block px-4 py-2 rounded-lg text-sm font-medium ${
+          achievementRate >= 70 
+            ? 'bg-green-50 text-green-700 border border-green-200' 
+            : achievementRate >= 50 
+            ? 'bg-yellow-50 text-yellow-700 border border-yellow-200' 
+            : 'bg-red-50 text-red-700 border border-red-200'
+        }`}>
+          {achievementRate}% goal achievement ({achievedCount} of {totalMonths} months)
+        </div>
+      </div>
     </div>
   );
 };
